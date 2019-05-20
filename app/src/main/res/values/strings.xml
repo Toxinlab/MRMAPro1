@@ -12,4 +12,11 @@
     <string name="expense_list_button">Category</string>
     <string name="expense_list_category">Apply cat.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="total_pie">Total: </string>
+
+    <string name="category_add_text">ADD CATEGORY</string>
+    <string name="cateogry_name">Category name</string>
+
+
 </resources>
