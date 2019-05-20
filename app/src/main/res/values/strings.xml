@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MRMAPro1</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="add_expense_fragment">ADD EXPENSE</string>
+    <string name="how_much_fragment">How much?</string>
+    <string name="expense_name_fragment">Expense name</string>
+    <string name="expense_button_fragment">Add</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="expense_list_filter">Filter by expense name dynamically</string>
+    <string name="expense_list_button">Category</string>
+    <string name="expense_list_category">Apply cat.</string>
+
 </resources>
