@@ -5,12 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.models.ExpensesViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +68,20 @@ public class CategoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    public void initList(){
+        ExpensesViewModel viewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+
+//        ListView listView = getActivity().findViewById(R.id.category_list_view);
+//        ArrayAdapter<String> arrayAdapter = ArrayAdapter.createFromResource(viewModel.getCategoriesList().getValue());
+//
+//        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+//            @Override
+//            public void onChanged(ArrayList<String> strings) {
+//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.fragment_category,viewModel.getCategoriesList().getValue());
+//            }
+//        });
     }
 
     @Override

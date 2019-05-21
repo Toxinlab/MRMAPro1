@@ -29,6 +29,7 @@
         android:layout_margin="30dp"/>
 
     <ListView
+        android:id="@+id/category_list_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp">
