@@ -4,14 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.bignerdranch.roid.mrmapro1.R;
@@ -37,6 +41,8 @@ public class CategoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    ExpensesViewModel mViewModel;
+
     private OnFragmentInteractionListener mListener;
 
     public CategoryFragment() {
@@ -58,6 +64,8 @@ public class CategoryFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
+
         return fragment;
     }
 
@@ -68,26 +76,53 @@ public class CategoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
     }
 
     public void initList(){
         ExpensesViewModel viewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
 
-//        ListView listView = getActivity().findViewById(R.id.category_list_view);
-//        ArrayAdapter<String> arrayAdapter = ArrayAdapter.createFromResource(viewModel.getCategoriesList().getValue());
-//
-//        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
-//            @Override
-//            public void onChanged(ArrayList<String> strings) {
-//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.fragment_category,viewModel.getCategoriesList().getValue());
-//            }
-//        });
+        final ListView listView = getActivity().findViewById(R.id.category_list_view);
+        Log.e("HEJ", "Is null: " + listView.toString());
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_category_single,viewModel.getCategoriesList().getValue());
+
+        listView.setAdapter(arrayAdapter);
+
+
+        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                //listView.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
+
+            }
+        });
+    }
+
+    public void initButtons(){
+        Button addButton = getActivity().findViewById(R.id.cateogry_add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
+                ArrayList tempList = mViewModel.getCategoriesList().getValue();
+                tempList.add(categoryEditText.getText());
+
+            }
+        });
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
         return inflater.inflate(R.layout.fragment_category, container, false);
     }
 
@@ -128,5 +163,14 @@ public class CategoryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+
+        initList();
+        initButtons();
     }
 }
