@@ -9,16 +9,10 @@
     >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.bignerdranch.roid.mrmapro1.views.PercentageTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="30dp"
-        android:text="SLIKASLIKASLIKASLIKA
-SLIKASLIKASLIKASLIKA
-SLIKASLIKASLIKASLIKA
-SLIKASLIKASLIKASLIKA
-SLIKASLIKASLIKASLIKA
-SLIKASLIKASLIKASLIKA"/>
+        android:padding="30dp" />
 
     <TextView
         android:layout_width="wrap_content"

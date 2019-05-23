@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbCategoryListAdapter;
 import com.bignerdranch.roid.mrmapro1.models.ExpensesViewModel;
 
 import java.util.ArrayList;
@@ -83,22 +87,31 @@ public class CategoryFragment extends Fragment {
 
     public void initList(){
         ExpensesViewModel viewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+//
+//        final ListView listView = getActivity().findViewById(R.id.category_list_view);
+//        Log.e("HEJ", "Is null: " + listView.toString());
+//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_category_single,viewModel.getCategoriesList().getValue());
+//
+//        listView.setAdapter(arrayAdapter);
+//
+//
+//        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+//            @Override
+//            public void onChanged(ArrayList<String> strings) {
+//                //listView.setAdapter(arrayAdapter);
+//                arrayAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
 
-        final ListView listView = getActivity().findViewById(R.id.category_list_view);
-        Log.e("HEJ", "Is null: " + listView.toString());
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_category_single,viewModel.getCategoriesList().getValue());
+        RecyclerView recyclerView = getActivity().findViewById(R.id.category_list_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        listView.setAdapter(arrayAdapter);
+        DumbCategoryListAdapter dumbAdapter = new DumbCategoryListAdapter(mViewModel.getCategoriesList().getValue());
+        recyclerView.setAdapter(dumbAdapter);
 
 
-        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
-            @Override
-            public void onChanged(ArrayList<String> strings) {
-                //listView.setAdapter(arrayAdapter);
-                arrayAdapter.notifyDataSetChanged();
-
-            }
-        });
     }
 
     public void initButtons(){

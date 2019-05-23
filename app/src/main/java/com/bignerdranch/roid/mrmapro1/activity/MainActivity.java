@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public ExpensesViewModel mExpensesViewModel;
+    private ExpensesViewModel mExpensesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,5 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         mExpensesViewModel.getExpensesList().setValue(tempList);
 
+    }
+
+    public ExpensesViewModel getmExpensesViewModel() {
+        return mExpensesViewModel;
     }
 }
