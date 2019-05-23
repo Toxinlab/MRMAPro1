@@ -10,11 +10,12 @@ import com.bignerdranch.roid.mrmapro1.R;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DumbCategoryListAdapter extends RecyclerView.Adapter<DumbCategoryListAdapter.DumbCategoryViewHolder> {
 
-    ArrayList<String> mCategorySet;
+    private ArrayList<String> mCategorySet;
 
     public DumbCategoryListAdapter(ArrayList<String> mCategorySet) {
         this.mCategorySet = mCategorySet;
@@ -34,6 +35,14 @@ public class DumbCategoryListAdapter extends RecyclerView.Adapter<DumbCategoryLi
     public void onBindViewHolder(@NonNull DumbCategoryViewHolder holder, int position) {
         holder.viewTextview.setText(mCategorySet.get(position));
 
+    }
+
+    public void setData(ArrayList<String> data){
+        DumbCategoryDiffUtil callback = new DumbCategoryDiffUtil(mCategorySet,data);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+        mCategorySet.clear();
+        mCategorySet.addAll(data);
+        result.dispatchUpdatesTo(this);
     }
 
     @Override

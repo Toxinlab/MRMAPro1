@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -111,6 +112,13 @@ public class CategoryFragment extends Fragment {
         DumbCategoryListAdapter dumbAdapter = new DumbCategoryListAdapter(mViewModel.getCategoriesList().getValue());
         recyclerView.setAdapter(dumbAdapter);
 
+        mViewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                dumbAdapter.setData(strings);
+            }
+        });
+
 
     }
 
@@ -118,14 +126,15 @@ public class CategoryFragment extends Fragment {
         Button addButton = getActivity().findViewById(R.id.cateogry_add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+        public void onClick(View v) {
 
-                EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
-                ArrayList tempList = mViewModel.getCategoriesList().getValue();
-                tempList.add(categoryEditText.getText());
+            EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
+            ArrayList tempList = mViewModel.getCategoriesList().getValue();
+            tempList.add(categoryEditText.getText());
+            mViewModel.getCategoriesList().setValue(tempList);
 
-            }
-        });
+        }
+    });
 
     }
 
