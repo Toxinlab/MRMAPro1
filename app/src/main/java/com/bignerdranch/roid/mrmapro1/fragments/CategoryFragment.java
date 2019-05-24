@@ -130,7 +130,7 @@ public class CategoryFragment extends Fragment {
 
             EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
             ArrayList tempList = mViewModel.getCategoriesList().getValue();
-            tempList.add(categoryEditText.getText());
+            tempList.add(categoryEditText.getText().toString());
             mViewModel.getCategoriesList().setValue(tempList);
 
         }
