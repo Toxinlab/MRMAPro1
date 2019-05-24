@@ -110,14 +110,24 @@ public class CategoryFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         DumbCategoryListAdapter dumbAdapter = new DumbCategoryListAdapter(mViewModel.getCategoriesList().getValue());
+
+        ArrayList tempList = new ArrayList();
+        tempList.addAll(mViewModel.getCategoriesList().getValue());
+        mViewModel.getCategoriesList().setValue(tempList);
+
         recyclerView.setAdapter(dumbAdapter);
+
 
         mViewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
+
                 dumbAdapter.setData(strings);
             }
         });
+
+        //Log.e("OCAJAN POKUSAJ", "CATEGORYFRAGMENT");
+        dumbAdapter.setData(mViewModel.getCategoriesList().getValue());
 
 
     }
@@ -126,13 +136,13 @@ public class CategoryFragment extends Fragment {
         Button addButton = getActivity().findViewById(R.id.cateogry_add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-        public void onClick(View v) {
+            public void onClick(View v) {
 
-            EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
-            ArrayList tempList = mViewModel.getCategoriesList().getValue();
-            tempList.add(categoryEditText.getText().toString());
-            mViewModel.getCategoriesList().setValue(tempList);
-
+                EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
+                ArrayList tempList = new ArrayList();
+                tempList.addAll(mViewModel.getCategoriesList().getValue());
+                tempList.add(categoryEditText.getText().toString());
+                mViewModel.getCategoriesList().setValue(tempList);
         }
     });
 

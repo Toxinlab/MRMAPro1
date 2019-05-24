@@ -4,13 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.models.ExpensesViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +38,8 @@ public class AddFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ExpensesViewModel mViewModel;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,6 +78,7 @@ public class AddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_add, container, false);
     }
 
@@ -107,5 +119,40 @@ public class AddFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(ExpensesViewModel.class);
+        initSpinner();
+
+
+    }
+
+    public void initSpinner(){
+        Spinner spinner = getActivity().findViewById(R.id.add_expense_spinner);
+
+        ArrayAdapter<String> adapter =
+                new  ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item,mViewModel.getCategoriesList().getValue());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        mViewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                Log.e("KAD",strings.toString());
+                adapter.clear();
+                adapter.addAll(strings);
+
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+
+
     }
 }
