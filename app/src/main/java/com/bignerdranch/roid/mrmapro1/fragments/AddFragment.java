@@ -1,6 +1,5 @@
 package com.bignerdranch.roid.mrmapro1.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -124,7 +123,7 @@ public class AddFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ExpensesViewModel.class);
+        mViewModel = ViewModelProviders.of(this.getActivity()).get(ExpensesViewModel.class);
         initSpinner();
 
 
@@ -134,19 +133,17 @@ public class AddFragment extends Fragment {
         Spinner spinner = getActivity().findViewById(R.id.add_expense_spinner);
 
         ArrayAdapter<String> adapter =
-                new  ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item,mViewModel.getCategoriesList().getValue());
+                new  ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item,new ArrayList<>());
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        mViewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+        mViewModel.getCategoriesLiveData().observe(this, new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
-                Log.e("KAD",strings.toString());
                 adapter.clear();
                 adapter.addAll(strings);
-
                 adapter.notifyDataSetChanged();
 
             }

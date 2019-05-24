@@ -17,8 +17,8 @@ public class DumbCategoryListAdapter extends RecyclerView.Adapter<DumbCategoryLi
 
     private ArrayList<String> mCategorySet;
 
-    public DumbCategoryListAdapter(ArrayList<String> mCategorySet) {
-        this.mCategorySet = mCategorySet;
+    public DumbCategoryListAdapter() {
+        this.mCategorySet = new ArrayList<>();
     }
 
 

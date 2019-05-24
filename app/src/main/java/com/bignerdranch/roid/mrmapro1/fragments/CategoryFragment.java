@@ -1,6 +1,5 @@
 package com.bignerdranch.roid.mrmapro1.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,16 +10,11 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.bignerdranch.roid.mrmapro1.R;
 import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbCategoryListAdapter;
@@ -47,6 +41,7 @@ public class CategoryFragment extends Fragment {
     private String mParam2;
 
     ExpensesViewModel mViewModel;
+    EditText mCategoryEditText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,16 +82,18 @@ public class CategoryFragment extends Fragment {
     }
 
     public void initList(){
-        ExpensesViewModel viewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+
+
 //
 //        final ListView listView = getActivity().findViewById(R.id.category_list_view);
 //        Log.e("HEJ", "Is null: " + listView.toString());
-//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_category_single,viewModel.getCategoriesList().getValue());
+//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_category_single,viewModel.getCategoriesLiveData().getValue());
 //
 //        listView.setAdapter(arrayAdapter);
 //
 //
-//        viewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+//        viewModel.getCategoriesLiveData().observe(this, new Observer<ArrayList<String>>() {
 //            @Override
 //            public void onChanged(ArrayList<String> strings) {
 //                //listView.setAdapter(arrayAdapter);
@@ -109,40 +106,26 @@ public class CategoryFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        DumbCategoryListAdapter dumbAdapter = new DumbCategoryListAdapter(mViewModel.getCategoriesList().getValue());
-
-        ArrayList tempList = new ArrayList();
-        tempList.addAll(mViewModel.getCategoriesList().getValue());
-        mViewModel.getCategoriesList().setValue(tempList);
-
+        DumbCategoryListAdapter dumbAdapter = new DumbCategoryListAdapter();
         recyclerView.setAdapter(dumbAdapter);
 
-
-        mViewModel.getCategoriesList().observe(this, new Observer<ArrayList<String>>() {
+        mViewModel.getCategoriesLiveData().observe(this, new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
-
                 dumbAdapter.setData(strings);
             }
         });
-
-        //Log.e("OCAJAN POKUSAJ", "CATEGORYFRAGMENT");
-        dumbAdapter.setData(mViewModel.getCategoriesList().getValue());
-
 
     }
 
     public void initButtons(){
         Button addButton = getActivity().findViewById(R.id.cateogry_add_button);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                EditText categoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
-                ArrayList tempList = new ArrayList();
-                tempList.addAll(mViewModel.getCategoriesList().getValue());
-                tempList.add(categoryEditText.getText().toString());
-                mViewModel.getCategoriesList().setValue(tempList);
+                String string = mCategoryEditText.getText().toString();
+                mViewModel.addCategory(string);
         }
     });
 
@@ -151,11 +134,10 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-
-
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_category, container, false);
+        mCategoryEditText = view.findViewById(R.id.category_name_edit_text);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -201,6 +183,8 @@ public class CategoryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(getActivity()).get(ExpensesViewModel.class);
+
+        mCategoryEditText = getActivity().findViewById(R.id.category_name_edit_text);
 
         initList();
         initButtons();
