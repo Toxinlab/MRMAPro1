@@ -18,5 +18,8 @@
     <string name="category_add_text">ADD CATEGORY</string>
     <string name="cateogry_name">Category name</string>
 
+    <string name="single_remove">Remove</string>
+    <string name="single_details">Details</string>
+
 
 </resources>

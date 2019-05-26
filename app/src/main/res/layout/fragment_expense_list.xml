@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ExpenseListFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <EditText
         android:id="@+id/expense_list_filter_edittext"
@@ -16,24 +17,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         >
 
         <Spinner
+            android:layout_weight="1"
             android:id="@+id/expense_list_category_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <Button
+            android:id="@+id/expense_list_apply_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/expense_list_category"/>
 
     </LinearLayout>
 
-    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:padding="10dp"
+        android:id="@+id/expense_list_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
-    </view>
 
 </LinearLayout>

@@ -13,12 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.models.ExpenseModel;
 import com.bignerdranch.roid.mrmapro1.models.ExpensesViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +44,10 @@ public class AddFragment extends Fragment {
     private String mParam2;
 
     private ExpensesViewModel mViewModel;
+    private Spinner mSpinner;
+    private Button mAddButton;
+    private EditText mNameText;
+    private EditText mCostText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,9 +85,13 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_add, container, false);
+        View view = inflater.inflate(R.layout.fragment_add, container, false);
+        mSpinner = view.findViewById(R.id.add_expense_spinner);
+        mAddButton=  view.findViewById(R.id.add_expense_button);
+        mNameText = view.findViewById(R.id.expense_name_edittext);
+        mCostText = view.findViewById(R.id.expense_cost_edittext);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -124,20 +137,22 @@ public class AddFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this.getActivity()).get(ExpensesViewModel.class);
+
         initSpinner();
+        initButton();
 
 
     }
 
     public void initSpinner(){
-        Spinner spinner = getActivity().findViewById(R.id.add_expense_spinner);
+
 
         ArrayAdapter<String> adapter =
                 new  ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item,new ArrayList<>());
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        // Apply the adapter to the mSpinner
+        mSpinner.setAdapter(adapter);
 
         mViewModel.getCategoriesLiveData().observe(this, new Observer<ArrayList<String>>() {
             @Override
@@ -145,11 +160,22 @@ public class AddFragment extends Fragment {
                 adapter.clear();
                 adapter.addAll(strings);
                 adapter.notifyDataSetChanged();
-
             }
         });
+    }
 
+    public void initButton(){
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExpenseModel newExpense = new
+                        ExpenseModel(mNameText.getText().toString(),mCostText.getText().toString(),new Date(),mSpinner.getSelectedItem().toString());
 
+                String toastString = "Expense added - "+newExpense.getCost()+"din.";
+                Toast.makeText(getContext(),toastString, Toast.LENGTH_SHORT).show();
+                mViewModel.addExpense(newExpense);
+            }
 
+        });
     }
 }

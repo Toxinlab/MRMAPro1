@@ -5,11 +5,11 @@ import java.util.Date;
 public class ExpenseModel {
 
     private String mName;
-    private int mCost;
+    private String mCost;
     private Date mDate;
     private String mCategory;
 
-    public ExpenseModel(String name, int cost, Date date, String category) {
+    public ExpenseModel(String name, String cost, Date date, String category) {
         mName = name;
         mCost = cost;
         mDate = date;
@@ -24,11 +24,11 @@ public class ExpenseModel {
         mName = name;
     }
 
-    public int getCost() {
+    public String getCost() {
         return mCost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(String cost) {
         mCost = cost;
     }
 

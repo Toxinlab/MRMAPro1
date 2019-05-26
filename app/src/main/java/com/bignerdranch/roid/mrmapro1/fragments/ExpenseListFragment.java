@@ -4,13 +4,30 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbCategoryListAdapter;
+import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbExpenseListAdapter;
+import com.bignerdranch.roid.mrmapro1.models.ExpenseModel;
+import com.bignerdranch.roid.mrmapro1.models.ExpensesViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +46,13 @@ public class ExpenseListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ExpensesViewModel mViewModel;
+
+    private EditText mFilterName;
+    private Spinner mCategorySpinner;
+    private Button mApplyButton;
+    private RecyclerView mRecyclerView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,7 +91,13 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_expense_list, container, false);
+        View view =  inflater.inflate(R.layout.fragment_expense_list, container, false);
+        mApplyButton = view.findViewById(R.id.expense_list_apply_button);
+        mCategorySpinner = view.findViewById(R.id.expense_list_category_spinner);
+        mRecyclerView = view.findViewById(R.id.expense_list_recyclerview);
+        mFilterName = view.findViewById(R.id.expense_list_filter_edittext);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -85,6 +115,15 @@ public class ExpenseListFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this.getActivity()).get(ExpensesViewModel.class);
+
+        init();
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -98,5 +137,67 @@ public class ExpenseListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void init(){
+        ArrayAdapter<String> adapter =
+                new  ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item,new ArrayList<>());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCategorySpinner.setAdapter(adapter);
+
+        mViewModel.getCategoriesLiveData().observe(this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                adapter.clear();
+                adapter.addAll(strings);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        DumbExpenseListAdapter dumbAdapter = new DumbExpenseListAdapter();
+        mRecyclerView.setAdapter(dumbAdapter);
+
+        mViewModel.getExpensesLiveData().observe(this, new Observer<ArrayList<ExpenseModel>>() {
+            @Override
+            public void onChanged(ArrayList<ExpenseModel> expenses) {
+                dumbAdapter.setData(expenses);
+            }
+        });
+
+        mFilterName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mViewModel.filterExpenses(mFilterName.getText().toString(),mCategorySpinner.getSelectedItem().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mApplyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.filterCategories(mCategorySpinner.getSelectedItem().toString());
+            }
+        });
+
+        dumbAdapter.setOnItemRemoveCallback(new DumbExpenseListAdapter.OnItemRemoveCallback() {
+            @Override
+            public void onItemRemove(int position) {
+                mViewModel.removeExpense(position);
+            }
+        });
+
     }
 }

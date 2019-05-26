@@ -58,4 +58,6 @@ public class DumbCategoryListAdapter extends RecyclerView.Adapter<DumbCategoryLi
             this.viewTextview = viewTextview;
         }
     }
+
+
 }
