@@ -1,9 +1,11 @@
 package com.bignerdranch.roid.mrmapro1.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mExpensesViewModel = ViewModelProviders.of(this).get(ExpensesViewModel.class);
 
         initPager();
     }
@@ -41,5 +44,22 @@ public class MainActivity extends AppCompatActivity {
 
     public ExpensesViewModel getmExpensesViewModel() {
         return mExpensesViewModel;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == DetailsActivity.BACK_CODE){
+            return;
+        }
+        if(resultCode == DetailsActivity.REMOVE_CODE){
+            mExpensesViewModel.removeExpense(data.getIntExtra(DetailsActivity.DETAILS_POSITION_KEY,-1));
+        }
+
+
+        return;
+
+
     }
 }

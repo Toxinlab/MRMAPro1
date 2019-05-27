@@ -1,16 +1,24 @@
 package com.bignerdranch.roid.mrmapro1.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bignerdranch.roid.mrmapro1.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +37,8 @@ public class PieFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private PieChartView mPie;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,7 +77,12 @@ public class PieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pie, container, false);
+        View view =  inflater.inflate(R.layout.fragment_pie, container, false);
+
+        mPie = view.findViewById(R.id.pie);
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -92,6 +107,21 @@ public class PieFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        List<SliceValue> pieData = new ArrayList<>();
+        pieData.add(new SliceValue(15, Color.BLUE));
+        pieData.add(new SliceValue(25, Color.GRAY));
+        pieData.add(new SliceValue(10, Color.RED));
+        pieData.add(new SliceValue(60, Color.MAGENTA));
+
+        PieChartData pieChartData = new PieChartData(pieData);
+        pieChartData.setHasCenterCircle(true);
+        mPie.setPieChartData(pieChartData);
+
     }
 
     /**

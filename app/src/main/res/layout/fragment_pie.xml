@@ -9,7 +9,8 @@
     >
 
     <!-- TODO: Update blank fragment layout -->
-    <com.bignerdranch.roid.mrmapro1.views.PercentageTextView
+    <lecho.lib.hellocharts.view.PieChartView
+        android:id="@+id/pie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="30dp" />
@@ -20,11 +21,11 @@
         android:text="@string/total_pie"
         android:padding="30dp"/>
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="30dp">
 
-    </ListView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

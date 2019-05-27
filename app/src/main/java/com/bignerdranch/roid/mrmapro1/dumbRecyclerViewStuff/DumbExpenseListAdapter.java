@@ -99,6 +99,18 @@ public class DumbExpenseListAdapter extends RecyclerView.Adapter<DumbExpenseList
                 }
             });
 
+            mDetailButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        if(mOnDetailsClickCallback != null){
+                            mOnDetailsClickCallback.onDetailsClick(position);
+                        }
+                    }
+                }
+            });
+
         }
     }
 
@@ -107,7 +119,7 @@ public class DumbExpenseListAdapter extends RecyclerView.Adapter<DumbExpenseList
     }
 
     public interface OnDetailsClickCallback{
-        void onDetailsClick();
+        void onDetailsClick(int position);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bignerdranch.roid.mrmapro1.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bignerdranch.roid.mrmapro1.R;
+import com.bignerdranch.roid.mrmapro1.activity.DetailsActivity;
 import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbCategoryListAdapter;
 import com.bignerdranch.roid.mrmapro1.dumbRecyclerViewStuff.DumbExpenseListAdapter;
 import com.bignerdranch.roid.mrmapro1.models.ExpenseModel;
@@ -42,6 +44,9 @@ public class ExpenseListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    public static int DETAILS_REQUEST = 13;
+    public static int DETAILS_RESULT = 12;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -198,6 +203,29 @@ public class ExpenseListFragment extends Fragment {
                 mViewModel.removeExpense(position);
             }
         });
+
+        dumbAdapter.setOnDetailsClickCallback(new DumbExpenseListAdapter.OnDetailsClickCallback() {
+            @Override
+            public void onDetailsClick(int position) {
+                ExpenseModel tempModel = mViewModel.getExpense(position);
+                Intent tempIntent = new Intent(getActivity(), DetailsActivity.class);
+
+                tempIntent.putExtra(DetailsActivity.DETAILS_NAME_KEY,tempModel.getName());
+                tempIntent.putExtra(DetailsActivity.DETAILS_COST_KEY,tempModel.getCost());
+                tempIntent.putExtra(DetailsActivity.DETAILS_CATEGORY_KEY,tempModel.getCategory());
+                tempIntent.putExtra(DetailsActivity.DETAILS_DATE_KEY,tempModel.getDate());
+                tempIntent.putExtra(DetailsActivity.DETAILS_POSITION_KEY,position);
+
+                startActivityForResult(tempIntent,DETAILS_REQUEST);
+
+            }
+        });
+
+
+
+
+
+
 
     }
 }

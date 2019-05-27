@@ -44,6 +44,10 @@ public class ExpensesViewModel extends ViewModel {
         mExpensesLiveData.setValue(mExpensesList);
     }
 
+    public ExpenseModel getExpense(int position){
+        return mExpensesLiveData.getValue().get(position);
+    }
+
     public void initModels(){
         mCategoriesList.add("");
         mCategoriesList.add("State");
@@ -86,7 +90,7 @@ public class ExpensesViewModel extends ViewModel {
         }
         ArrayList<ExpenseModel> tempExpenses = new ArrayList<>();
         for (int i = 0; i<mExpensesList.size();i++) {
-            if(mExpensesList.get(i).getCategory().equals(category)){
+            if (mExpensesList.get(i).getCategory().equals(category)) {
                 tempExpenses.add(mExpensesList.get(i));
             }
         }
